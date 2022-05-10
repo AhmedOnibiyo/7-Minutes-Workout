@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">7MinutesWorkout</string>
     <string name="image">start image</string>
+    <string name="start">START</string>
+    <string name="pause">PAUSE</string>
+    <string name="reset">RESET</string>
 </resources>

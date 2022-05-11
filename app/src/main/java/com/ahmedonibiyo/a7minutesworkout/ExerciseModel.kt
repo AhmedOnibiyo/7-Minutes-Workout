@@ -31,11 +31,11 @@ class ExerciseModel(
         this.image = image
     }
 
-    fun getISCompleted(): Boolean {
+    fun getIsCompleted(): Boolean {
         return isCompleted
     }
 
-    fun setISCompleted(isCompleted: Boolean) {
+    fun setIsCompleted(isCompleted: Boolean) {
         this.isCompleted = isCompleted
     }
 

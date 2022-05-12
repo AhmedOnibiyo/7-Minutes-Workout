@@ -20,17 +20,16 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var restTimer: CountDownTimer? = null
     private var restProgress = 0
-
     private var exerciseTimer: CountDownTimer? = null
     private var exerciseProgress = 0
+    val exerciseTimerDuration: Long = 1L
+    val restTimerDuration: Long = 1L
 
     private var exerciseList: ArrayList<ExerciseModel>? = null
     private var currentExercisePosition = -1
 
-    val exerciseTimerDuration: Long = 1L
-    val restTimerDuration: Long = 1L
 
-    var exerciseAdapater: ExerciseStatusAdapter? = null
+    var exerciseAdapter: ExerciseStatusAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +38,16 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         setSupportActionBar(binding?.toolbarExercise)
 
-        tts = TextToSpeech(this, this)
-
         if (supportActionBar != null) {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
-
-        exerciseList = Constants.defaultExerciseList()
-
         binding?.toolbarExercise?.setNavigationOnClickListener {
             onBackPressed()
         }
+
+        tts = TextToSpeech(this, this)
+
+        exerciseList = Constants.defaultExerciseList()
 
         setupRestView()
         setupExerciseStatusRecyclerView()
@@ -59,8 +57,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         binding?.rvExerciseStatus?.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        exerciseAdapater = ExerciseStatusAdapter(exerciseList!!)
-        binding?.rvExerciseStatus?.adapter = exerciseAdapater
+        exerciseAdapter = ExerciseStatusAdapter(exerciseList!!)
+        binding?.rvExerciseStatus?.adapter = exerciseAdapter
     }
 
     private fun setupRestView() {
@@ -137,7 +135,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 currentExercisePosition++
 
                 exerciseList!![currentExercisePosition].setIsSelected(true)
-                exerciseAdapater!!.notifyDataSetChanged()
+                exerciseAdapter!!.notifyDataSetChanged()
 
                 setupExerciseView()
             }
@@ -157,16 +155,16 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
-                exerciseList!![currentExercisePosition].setIsSelected(false)
-                exerciseList!![currentExercisePosition].setIsCompleted(true)
-                exerciseAdapater!!.notifyDataSetChanged()
 
                 if (currentExercisePosition < exerciseList!!.size - 1) {
+                    exerciseList!![currentExercisePosition].setIsSelected(false)
+                    exerciseList!![currentExercisePosition].setIsCompleted(true)
+                    exerciseAdapter!!.notifyDataSetChanged()
                     setupRestView()
                 } else {
-                    val intent = Intent(applicationContext, FinishActivity::class.java)
-                    startActivity(intent)
                     finish()
+                    val intent = Intent(this@ExerciseActivity, FinishActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }.start()
